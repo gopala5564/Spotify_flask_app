@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spotify-scraper"
+version = "1.0.0"
+description = "A comprehensive tool for scraping Spotify data including playlists, tracks, and audio features"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = ["spotify", "api", "scraper", "data-collection"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "spotipy>=2.22.0",
+    "python-dotenv>=0.19.0",
+    "pandas>=1.3.0",
+    "requests>=2.25.0",
+    "tabulate>=0.8.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=3.0",
+    "black>=22.0",
+    "flake8>=4.0",
+    "mypy>=0.950",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/spotify-scraper"
+Documentation = "https://github.com/yourusername/spotify-scraper#readme"
+Repository = "https://github.com/yourusername/spotify-scraper.git"
+"Bug Tracker" = "https://github.com/yourusername/spotify-scraper/issues"
+
+[tool.setuptools]
+packages = ["spotify_scraper", "spotify_scraper.database", "spotify_scraper.api", "spotify_scraper.utils"]
+package-dir = {"" = "src"}

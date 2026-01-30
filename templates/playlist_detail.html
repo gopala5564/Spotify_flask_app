@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}{{ playlist.name }} - Spotify Scraper{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <a href="/playlists" class="btn btn-secondary mb-3">Back to Playlists</a>
+        <h1>{{ playlist.name }}</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Playlist Details</h5>
+                <ul class="list-unstyled">
+                    <li><strong>Owner:</strong> {{ playlist.owner }}</li>
+                    <li><strong>Tracks:</strong> {{ playlist.total_tracks }}</li>
+                    <li><strong>Followers:</strong> {{ "{:,}".format(playlist.followers) }}</li>
+                    <li><strong>Public:</strong> {% if playlist.public %}Yes{% else %}Private{% endif %}</li>
+                    <li><strong>Collaborative:</strong> {% if playlist.collaborative %}Yes{% else %}No{% endif %}</li>
+                    {% if playlist.external_url %}
+                    <li><strong>URL:</strong> <a href="{{ playlist.external_url }}" target="_blank">Open on Spotify</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Description</h5>
+                <p>{{ playlist.description if playlist.description else "No description" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Tracks in this Playlist</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Track Name</th>
+                        <th>Artist</th>
+                        <th>Album</th>
+                        <th>Released</th>
+                        <th>Popularity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for track in tracks %}
+                    <tr>
+                        <td>{{ track.name if track.name else "Unknown" }}</td>
+                        <td>{{ track.artist if track.artist else "Unknown" }}</td>
+                        <td>{{ track.album if track.album else "Unknown" }}</td>
+                        <td>{{ track.release_date if track.release_date else "N/A" }}</td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar" role="progressbar" style="width: {{ (track.popularity or 0) }}%">
+                                    {{ track.popularity or 0 }}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if tracks|length == 0 %}
+        <div class="alert alert-info">No tracks found in this playlist.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

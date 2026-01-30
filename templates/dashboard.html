@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Spotify Scraper{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1>Spotify App</h1>
+        <p class="text-muted">Database statistics and overview</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Playlists</h5>
+                <h2 class="card-text">{{ stats.playlists }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Tracks</h5>
+                <h2 class="card-text">{{ stats.tracks }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Audio Features</h5>
+                <h2 class="card-text">{{ stats.audio_features }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Coverage</h5>
+                <h2 class="card-text">
+                    {% if stats.tracks > 0 %}
+                        {{ "%.1f"|format((stats.audio_features / stats.tracks) * 100) }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Quick Links</h3>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="/playlists">Browse Playlists</a>
+            </li>
+            <li class="list-group-item">
+                <a href="/tracks">Browse All Tracks</a>
+            </li>
+            <li class="list-group-item">
+                <a href="/api/stats">View Stats API</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h3>API Documentation</h3>
+        <p>This app provides REST API endpoints for accessing the Spotify data:</p>
+        <ul>
+            <li><code>GET /api/stats</code> - Database statistics</li>
+            <li><code>GET /api/playlists</code> - List playlists with pagination</li>
+            <li><code>GET /api/playlists/&lt;id&gt;</code> - Playlist details</li>
+            <li><code>GET /api/tracks</code> - List tracks with pagination</li>
+            <li><code>GET /api/tracks/&lt;id&gt;</code> - Track details</li>
+            <li><code>GET /api/search?q=query</code> - Search playlists and tracks</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
