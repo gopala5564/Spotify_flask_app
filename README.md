@@ -1,4 +1,4 @@
-# Spotify Scraper
+# Spotify flask app
 
 A comprehensive Python tool for scraping Spotify data including playlists, tracks, and audio features. Data is automatically stored in a SQLite database and exported to CSV/JSON formats.
 
