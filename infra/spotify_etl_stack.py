@@ -192,7 +192,7 @@ class SpotifyEtlStack(Stack):
             role=lambda_role,
             timeout=Duration.seconds(300),
             memory_size=3008,
-            ephemeral_storage=cdk.Size.gibibytes(10),
+            ephemeral_storage_size=cdk.Size.gibibytes(10),
             environment=common_env,
             log_retention=logs.RetentionDays.TWO_WEEKS,
             description="Extracts Spotify data and writes to raw layer"
@@ -209,7 +209,7 @@ class SpotifyEtlStack(Stack):
             role=lambda_role,
             timeout=Duration.seconds(300),
             memory_size=3008,
-            ephemeral_storage=cdk.Size.gibibytes(10),
+            ephemeral_storage_size=cdk.Size.gibibytes(10),
             environment=common_env,
             log_retention=logs.RetentionDays.TWO_WEEKS,
             description="Transforms raw data into structured format"
