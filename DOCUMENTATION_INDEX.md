@@ -93,6 +93,9 @@ Your Spotify Flask application has been successfully transformed into a **produc
 | Component | File | Purpose |
 |-----------|------|---------|
 | Infrastructure | `infra/spotify_etl_stack.py` | AWS CDK stack definition |
+| Infrastructure Deps | `infra/requirements.txt` | CDK and AWS SDK dependencies |
+| Lambda Handlers | `app/lambdas/*.py` | Extract, Transform, Load, Orchestrate |
+| Application Deps | `app/requirements.txt` | Runtime dependencies for Lambda |
 | Extract | `app/lambdas/extract_handler.py` | Fetch from Spotify API |
 | Transform | `app/lambdas/transform_handler.py` | Clean and deduplicate |
 | Load | `app/lambdas/load_handler.py` | Move to final layer |
