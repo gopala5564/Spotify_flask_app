@@ -54,13 +54,11 @@ class SpotifyEtlStack(Stack):
         # ======================
         # S3 Data Lake Bucket
         # ======================
-        # Generate unique bucket name
-        bucket_name = f"spotify-etl-{self.account}-{self.region}".lower()
-        
+        # Let CDK auto-generate a unique bucket name
+        # (self.account is an unresolved token at synth time, so it can't be used in bucket_name)
         data_lake_bucket = s3.Bucket(
             self,
             "DataLakeBucket",
-            bucket_name=bucket_name,
             versioned=True,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
             encryption=s3.BucketEncryption.S3_MANAGED,
