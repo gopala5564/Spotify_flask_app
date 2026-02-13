@@ -175,7 +175,6 @@ class SpotifyEtlStack(Stack):
             "DATA_LAKE_BUCKET": data_lake_bucket.bucket_name,
             "SPOTIFY_CLIENT_ID": spotify_client_id.value_as_string,
             "SPOTIFY_CLIENT_SECRET": spotify_client_secret.value_as_string,
-            "AWS_REGION": self.region,
         }
 
         # Lambda code path

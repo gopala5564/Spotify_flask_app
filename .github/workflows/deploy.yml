@@ -11,19 +11,27 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'
-        required: true
+        description: '🎯 Choose environment to deploy'
+        required: true 
         default: 'dev'
         type: choice
         options:
           - dev
           - staging
           - prod
+      auto_approve:
+        description: 'Skip approval (use with caution)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
 
 env:
   AWS_REGION: us-east-1
   PYTHON_VERSION: '3.11'
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
 
 jobs:
   build-and-test:
