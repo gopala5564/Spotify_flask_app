@@ -149,7 +149,6 @@ jobs:
       - name: Deploy to Dev environment
         run: |
           cdk deploy SpotifyEtlStack \
-            --parameters DataLakeBucketName=${{ secrets.DATA_LAKE_BUCKET_DEV }} \
             --parameters SpotifyClientId=${{ secrets.SPOTIFY_CLIENT_ID_DEV }} \
             --parameters SpotifyClientSecret=${{ secrets.SPOTIFY_CLIENT_SECRET_DEV }} \
             --require-approval never \
@@ -223,7 +222,6 @@ jobs:
       - name: Deploy to Production environment
         run: |
           cdk deploy SpotifyEtlStack \
-            --parameters DataLakeBucketName=${{ secrets.DATA_LAKE_BUCKET_PROD }} \
             --parameters SpotifyClientId=${{ secrets.SPOTIFY_CLIENT_ID_PROD }} \
             --parameters SpotifyClientSecret=${{ secrets.SPOTIFY_CLIENT_SECRET_PROD }} \
             --require-approval never \
@@ -295,7 +293,6 @@ jobs:
           ENV_UPPER=$(echo $ENV | tr '[:lower:]' '[:upper:]')
           
           cdk deploy SpotifyEtlStack \
-            --parameters DataLakeBucketName=${{ secrets[format('DATA_LAKE_BUCKET_{0}', env.ENV_UPPER)] }} \
             --parameters SpotifyClientId=${{ secrets[format('SPOTIFY_CLIENT_ID_{0}', env.ENV_UPPER)] }} \
             --parameters SpotifyClientSecret=${{ secrets[format('SPOTIFY_CLIENT_SECRET_{0}', env.ENV_UPPER)] }} \
             --require-approval never \

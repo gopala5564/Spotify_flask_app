@@ -58,3 +58,8 @@ spotify_data.db
 # OS
 Thumbs.db
 .DS_Store
+*.md
+*.out
+/node_modules
+test_cdk_synth.py
+setup-local-cdk.ps1

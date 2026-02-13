@@ -35,13 +35,6 @@ class SpotifyEtlStack(Stack):
         # ======================
         # Parameters
         # ======================
-        bucket_name_param = CfnParameter(
-            self,
-            "DataLakeBucketName",
-            type="String",
-            description="S3 bucket name for data lake (must be globally unique)"
-        )
-        
         spotify_client_id = CfnParameter(
             self,
             "SpotifyClientId",
@@ -61,10 +54,13 @@ class SpotifyEtlStack(Stack):
         # ======================
         # S3 Data Lake Bucket
         # ======================
+        # Generate unique bucket name
+        bucket_name = f"spotify-etl-{self.account}-{self.region}".lower()
+        
         data_lake_bucket = s3.Bucket(
             self,
             "DataLakeBucket",
-            bucket_name=bucket_name_param.value_as_string,
+            bucket_name=bucket_name,
             versioned=True,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
             encryption=s3.BucketEncryption.S3_MANAGED,
@@ -193,8 +189,15 @@ class SpotifyEtlStack(Stack):
             memory_size=3008,
             ephemeral_storage_size=cdk.Size.gibibytes(10),
             environment=common_env,
-            log_retention=logs.RetentionDays.TWO_WEEKS,
             description="Extracts Spotify data and writes to raw layer"
+        )
+        # Create log group for Extract Lambda
+        extract_log_group = logs.LogGroup(
+            self,
+            "ExtractLogGroup",
+            log_group_name=f"/aws/lambda/{extract_fn.function_name}",
+            retention=logs.RetentionDays.TWO_WEEKS,
+            removal_policy=RemovalPolicy.DESTROY
         )
 
         # Transform Lambda
@@ -210,8 +213,15 @@ class SpotifyEtlStack(Stack):
             memory_size=3008,
             ephemeral_storage_size=cdk.Size.gibibytes(10),
             environment=common_env,
-            log_retention=logs.RetentionDays.TWO_WEEKS,
             description="Transforms raw data into structured format"
+        )
+        # Create log group for Transform Lambda
+        transform_log_group = logs.LogGroup(
+            self,
+            "TransformLogGroup",
+            log_group_name=f"/aws/lambda/{transform_fn.function_name}",
+            retention=logs.RetentionDays.TWO_WEEKS,
+            removal_policy=RemovalPolicy.DESTROY
         )
 
         # Load Lambda
@@ -226,8 +236,15 @@ class SpotifyEtlStack(Stack):
             timeout=Duration.seconds(300),
             memory_size=3008,
             environment=common_env,
-            log_retention=logs.RetentionDays.TWO_WEEKS,
             description="Loads transformed data into processed layer"
+        )
+        # Create log group for Load Lambda
+        load_log_group = logs.LogGroup(
+            self,
+            "LoadLogGroup",
+            log_group_name=f"/aws/lambda/{load_fn.function_name}",
+            retention=logs.RetentionDays.TWO_WEEKS,
+            removal_policy=RemovalPolicy.DESTROY
         )
 
         # Orchestrator Lambda
@@ -242,8 +259,15 @@ class SpotifyEtlStack(Stack):
             timeout=Duration.seconds(900),
             memory_size=3008,
             environment=common_env,
-            log_retention=logs.RetentionDays.ONE_MONTH,
             description="Orchestrates the complete ETL pipeline"
+        )
+        # Create log group for Orchestrator Lambda
+        orchestrator_log_group = logs.LogGroup(
+            self,
+            "OrchestratorLogGroup",
+            log_group_name=f"/aws/lambda/{orchestrator_fn.function_name}",
+            retention=logs.RetentionDays.ONE_MONTH,
+            removal_policy=RemovalPolicy.DESTROY
         )
 
         # ======================
@@ -302,65 +326,54 @@ class SpotifyEtlStack(Stack):
             targets.LambdaFunction(orchestrator_fn)
         )
 
-        # Optional: Manual trigger rule (comment in/out as needed)
-        # You can invoke this rule via EventBridge console or AWS CLI for testing
-        manual_trigger = events.Rule(
-            self,
-            "ManualETLTrigger",
-            description="Manual trigger for ETL pipeline testing"
-        )
-        manual_trigger.add_target(
-            targets.LambdaFunction(orchestrator_fn)
-        )
-
         # ======================
         # Outputs
         # ======================
         CfnOutput(
             self,
-            "DataLakeBucketName",
+            "S3DataLakeBucketName",
             value=data_lake_bucket.bucket_name,
             description="Name of the S3 data lake bucket"
         )
 
         CfnOutput(
             self,
-            "DataLakeBucketArn",
+            "S3DataLakeBucketArn",
             value=data_lake_bucket.bucket_arn,
             description="ARN of the S3 data lake bucket"
         )
 
         CfnOutput(
             self,
-            "ExtractFunctionArn",
+            "LambdaExtractFunctionArn",
             value=extract_fn.function_arn,
             description="ARN of the Extract Lambda function"
         )
 
         CfnOutput(
             self,
-            "TransformFunctionArn",
+            "LambdaTransformFunctionArn",
             value=transform_fn.function_arn,
             description="ARN of the Transform Lambda function"
         )
 
         CfnOutput(
             self,
-            "LoadFunctionArn",
+            "LambdaLoadFunctionArn",
             value=load_fn.function_arn,
             description="ARN of the Load Lambda function"
         )
 
         CfnOutput(
             self,
-            "OrchestratorFunctionArn",
+            "LambdaOrchestratorFunctionArn",
             value=orchestrator_fn.function_arn,
             description="ARN of the Orchestrator Lambda function"
         )
 
         CfnOutput(
             self,
-            "ETLScheduleRuleName",
+            "EventBridgeScheduleRuleName",
             value=etl_schedule.rule_name,
             description="Name of the EventBridge rule for daily ETL execution"
         )
