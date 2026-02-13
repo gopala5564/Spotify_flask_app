@@ -54,7 +54,6 @@ logs/
 *.db
 spotify_data.db
 *.csv
-*.json
 
 # OS
 Thumbs.db

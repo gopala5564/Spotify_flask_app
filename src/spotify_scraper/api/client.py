@@ -121,6 +121,7 @@ class SpotifyAPIClient:
                         'explicit': track['explicit'],
                         'isrc': track.get('external_ids', {}).get('isrc', 'N/A'),
                         'spotify_url': track['external_urls']['spotify'],
+                        'preview_url': track.get('preview_url'),
                         'added_at': item['added_at'],
                         'added_by': item.get('added_by', {}).get('display_name', 'N/A')
                     }

@@ -1,0 +1,11 @@
+{
+  "app": "python app.py",
+  "context": {
+    "@aws-cdk/core:newStyleStackSynthesis": true,
+    "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
+    "@aws-cdk/aws-s3:grantWriteWithoutAcl": true,
+    "@aws-cdk/aws-sns-subscriptions:bottomUpTopicPolicy": true,
+    "@aws-cdk/aws-efs:denyUnencryptedObjectUploads": true,
+    "@aws-cdk/aws-lambda:recognizeVersionAttribute": true
+  }
+}
