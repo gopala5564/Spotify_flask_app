@@ -77,6 +77,7 @@ class DatabaseManager:
                     explicit BOOLEAN,
                     isrc TEXT,
                     spotify_url TEXT,
+                    preview_url TEXT,
                     added_at TIMESTAMP,
                     added_by TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -122,7 +123,7 @@ class DatabaseManager:
             self.cursor.execute('''
                 INSERT OR REPLACE INTO playlists 
                 (playlist_id, name, description, owner, owner_id, total_tracks, 
-                 followers, public, collaborative, external_url, image_url, updated_at)
+                followers, public, collaborative, external_url, image_url, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 playlist_data.get('playlist_id'),
@@ -153,9 +154,9 @@ class DatabaseManager:
             self.cursor.execute('''
                 INSERT OR REPLACE INTO tracks 
                 (track_id, playlist_id, name, artist, artist_id, album, album_id, 
-                 release_date, duration_ms, duration_minutes, popularity, explicit, 
-                 isrc, spotify_url, added_at, added_by)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                release_date, duration_ms, duration_minutes, popularity, explicit, 
+                 isrc, spotify_url, preview_url, added_at, added_by)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 track_data.get('track_id'),
                 track_data.get('playlist_id'),
@@ -171,6 +172,7 @@ class DatabaseManager:
                 track_data.get('explicit'),
                 track_data.get('isrc'),
                 track_data.get('spotify_url'),
+                track_data.get('preview_url'),
                 track_data.get('added_at'),
                 track_data.get('added_by')
             ))
